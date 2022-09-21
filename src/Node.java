@@ -3,22 +3,22 @@ import java.util.ArrayList;
 
 public class Node
 {
-    private File folder;
-    private ArrayList<Node> children;
+    private final File folder;
+    private final ArrayList<Node> children;
     private long size;
     private int level;
-    private long sizeLimit;
-
-    public Node(File folder, long sizeLimit)
-    {
-        this.folder = folder;
-        this.sizeLimit = sizeLimit;
-        children = new ArrayList<>();
-    }
+    private long limit;
 
     public Node(File folder)
     {
-        this(folder, 0);
+        this.folder = folder;
+        children = new ArrayList<>();
+    }
+
+    public Node(File folder, long limit)
+    {
+        this(folder);
+        this.limit = limit;
     }
 
     public File getFolder()
@@ -29,17 +29,12 @@ public class Node
     public void addChild(Node node)
     {
         node.setLevel(level + 1);
+        node.setLimit(limit);
         children.add(node);
     }
 
-    private void setLevel(int level)
-    {
+    private void setLevel(int level) {
         this.level = level;
-    }
-
-    public ArrayList<Node> getChildren()
-    {
-        return children;
     }
 
     public long getSize() {
@@ -55,23 +50,19 @@ public class Node
         StringBuilder builder = new StringBuilder();
         String size = SizeCalculator.getHumanReadableSize(getSize());
 
-        builder.append(folder.getName() + " - " + size + "\n");
+        builder.append(folder.getName()).append(" - ").append(size).append("\n");
 
         for (Node child : children)
         {
-            if(child.getSize() < sizeLimit) {
+            if(child.getSize() < limit) {
                 continue;
             }
-            builder.append(" ".repeat(level + 1) + child.toString());
+            builder.append(" ".repeat(level + 1)).append(child);
         }
         return builder.toString();
     }
 
-    public long getSizeLimit() {
-        return sizeLimit;
-    }
-
-    public void setSizeLimit(long sizeLimit) {
-        this.sizeLimit = sizeLimit;
+    private void setLimit(long limit) {
+        this.limit = limit;
     }
 }

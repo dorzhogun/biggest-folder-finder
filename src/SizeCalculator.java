@@ -5,7 +5,7 @@ public class SizeCalculator
 {
     private static final char[] sizeMultipliers =
             {'B', 'K', 'M', 'G', 'T'};
-    private static  HashMap<Character, Integer>
+    private static final HashMap<Character, Integer>
             char2multiplier = getMultipliers();
 
     public static String getHumanReadableSize(long size)
